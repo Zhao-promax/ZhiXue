@@ -1,10 +1,10 @@
-package com.zixue.progress.dto;
+package com.zixue.common.dto;
 
 import lombok.Data;
 
 /**
  * 学情聚合内部接口返回：某视频的进度/时长汇总。
- * 由进度服务提供，学情服务通过 OpenFeign 调用。
+ * 由进度服务提供，学情服务通过 OpenFeign 调用（跨服务共享 DTO）。
  */
 @Data
 public class DurationSummaryVO {

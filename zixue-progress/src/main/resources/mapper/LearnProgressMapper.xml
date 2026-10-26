@@ -21,7 +21,7 @@
     </insert>
 
     <!-- 学情聚合用：观看人数 / 完播数(≥90%) / 跳出数(<10%) -->
-    <select id="selectProgressStats" resultType="com.zixue.progress.dto.DurationSummaryVO">
+    <select id="selectProgressStats" resultType="com.zixue.common.dto.DurationSummaryVO">
         SELECT
             #{videoId} AS videoId,
             COUNT(DISTINCT user_id) AS watchUv,
@@ -29,5 +29,10 @@
             IFNULL(SUM(CASE WHEN position * 10 &lt; duration * 1 THEN 1 ELSE 0 END), 0) AS bounceCount
         FROM t_learn_progress
         WHERE video_id = #{videoId}
+    </select>
+
+    <select id="selectActiveVideoIds" resultType="long">
+        SELECT DISTINCT video_id
+        FROM t_learn_progress
     </select>
 </mapper>

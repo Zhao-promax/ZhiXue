@@ -2,10 +2,12 @@ package com.zixue.progress.controller;
 
 import com.zixue.common.constant.CommonConstants;
 import com.zixue.common.result.Result;
-import com.zixue.progress.dto.DurationSummaryVO;
+import com.zixue.common.dto.DurationSummaryVO;
 import com.zixue.progress.dto.ProgressReportDTO;
 import com.zixue.progress.dto.ProgressVO;
 import com.zixue.progress.service.ProgressService;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,5 +47,11 @@ public class ProgressController {
     @GetMapping("/internal/valid-duration/summary")
     public Result<DurationSummaryVO> getDurationSummary(@RequestParam Long videoId) {
         return Result.ok(progressService.getDurationSummary(videoId));
+    }
+
+    /** 内部接口：有进度记录的视频 ID 列表（学情服务 OpenFeign 调用） */
+    @GetMapping("/internal/video-ids")
+    public Result<List<Long>> listActiveVideoIds() {
+        return Result.ok(progressService.listActiveVideoIds());
     }
 }

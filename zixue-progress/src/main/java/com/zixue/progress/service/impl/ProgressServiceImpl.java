@@ -6,7 +6,7 @@ import com.zixue.common.exception.BizException;
 import com.zixue.progress.anticheat.AntiCheatResult;
 import com.zixue.progress.anticheat.AntiCheatValidator;
 import com.zixue.progress.anticheat.DurationCalculator;
-import com.zixue.progress.dto.DurationSummaryVO;
+import com.zixue.common.dto.DurationSummaryVO;
 import com.zixue.progress.dto.ProgressReportDTO;
 import com.zixue.progress.dto.ProgressVO;
 import com.zixue.progress.entity.LearnProgress;
@@ -16,6 +16,8 @@ import com.zixue.progress.mq.ProgressMessage;
 import com.zixue.progress.mq.ProgressProducer;
 import com.zixue.progress.redis.ProgressRedisService;
 import com.zixue.progress.service.ProgressService;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -105,6 +107,11 @@ public class ProgressServiceImpl implements ProgressService {
         summary.setVideoId(videoId);
         summary.setTotalValidDuration(durationMapper.selectTotalValidDuration(videoId));
         return summary;
+    }
+
+    @Override
+    public List<Long> listActiveVideoIds() {
+        return progressMapper.selectActiveVideoIds();
     }
 
     private ProgressVO toVO(LearnProgress p) {
