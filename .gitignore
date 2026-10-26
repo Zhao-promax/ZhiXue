@@ -1,0 +1,31 @@
+# --- Maven ---
+target/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+
+# --- IDE ---
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- Logs ---
+logs/
+*.log
+
+# --- 个人求职材料（不推送） ---
+简历-知学学情平台.md
+面试应答稿-知学学情平台.md
+技术方案-知学学情平台.md

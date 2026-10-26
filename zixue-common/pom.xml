@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.zixue</groupId>
+        <artifactId>zixue</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>zixue-common</artifactId>
+    <name>zixue-common</name>
+    <description>公共模块：统一返回、业务异常、全局异常处理</description>
+
+    <dependencies>
+        <!-- 全局异常处理器需要 spring-web（版本由 Spring Boot BOM 管理） -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <!-- 日志门面 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+</project>
