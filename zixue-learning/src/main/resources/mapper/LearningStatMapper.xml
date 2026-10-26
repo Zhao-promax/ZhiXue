@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zixue.learning.mapper.LearningStatMapper">
+
+    <insert id="upsert">
+        INSERT INTO t_learning_stat
+            (stat_dim, dim_id, stat_date, watch_uv, finish_rate, avg_valid_duration, bounce_rate)
+        VALUES
+            (#{statDim}, #{dimId}, #{statDate}, #{watchUv}, #{finishRate}, #{avgValidDuration}, #{bounceRate})
+        ON DUPLICATE KEY UPDATE
+            watch_uv = VALUES(watch_uv),
+            finish_rate = VALUES(finish_rate),
+            avg_valid_duration = VALUES(avg_valid_duration),
+            bounce_rate = VALUES(bounce_rate)
+    </insert>
+
+    <select id="selectLatest" resultType="com.zixue.learning.entity.LearningStat">
+        SELECT id, stat_dim, dim_id, stat_date, watch_uv, finish_rate, avg_valid_duration, bounce_rate
+        FROM t_learning_stat
+        WHERE stat_dim = #{statDim} AND dim_id = #{dimId}
+        ORDER BY stat_date DESC
+        LIMIT 1
+    </select>
+</mapper>
