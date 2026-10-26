@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zixue.progress.mapper.LearnDurationMapper">
+
+    <!-- 累加有效时长：按 reportTime 幂等，重复/乱序消息不重复累加 -->
+    <insert id="accumulate">
+        INSERT INTO t_learn_duration
+            (user_id, video_id, valid_duration, watch_count, last_report_time, last_watch_time)
+        VALUES
+            (#{userId}, #{videoId}, #{validSeconds}, 1, #{reportTime}, NOW())
+        ON DUPLICATE KEY UPDATE
+            valid_duration = valid_duration + IF(#{reportTime} &gt; last_report_time, #{validSeconds}, 0),
+            last_report_time = IF(#{reportTime} &gt; last_report_time, #{reportTime}, last_report_time),
+            last_watch_time = IF(#{reportTime} &gt; last_report_time, NOW(), last_watch_time)
+    </insert>
+
+    <select id="selectTotalValidDuration" resultType="long">
+        SELECT IFNULL(SUM(valid_duration), 0)
+        FROM t_learn_duration
+        WHERE video_id = #{videoId}
+    </select>
+</mapper>
