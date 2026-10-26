@@ -1,0 +1,16 @@
+# 统一换行符，避免 Windows / Linux 差异
+* text=auto
+
+# Maven wrapper 脚本
+mvnw text eol=lf
+mvnw.cmd text eol=crlf
+
+# 脚本与配置统一 LF
+*.sh text eol=lf
+*.java text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.sql text eol=lf
+*.js text eol=lf
