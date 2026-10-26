@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: zixue-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: progress-route
+          uri: lb://zixue-progress
+          predicates:
+            - Path=/api/progress/**
+        - id: learning-route
+          uri: lb://zixue-learning
+          predicates:
+            - Path=/api/learning/**
+
+logging:
+  level:
+    com.zixue: debug
