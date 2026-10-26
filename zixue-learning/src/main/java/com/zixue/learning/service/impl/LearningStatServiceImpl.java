@@ -5,8 +5,8 @@ import com.zixue.learning.entity.LearningStat;
 import com.zixue.learning.feign.ProgressFeignClient;
 import com.zixue.learning.mapper.LearningStatMapper;
 import com.zixue.learning.service.LearningStatService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,13 +14,18 @@ import java.time.LocalDate;
 /**
  * 学情聚合：调用进度服务获取汇总，计算观看完成率 / 平均时长 / 跳出率并落库。
  */
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class LearningStatServiceImpl implements LearningStatService {
+
+    private static final Logger log = LoggerFactory.getLogger(LearningStatServiceImpl.class);
 
     private final ProgressFeignClient progressFeignClient;
     private final LearningStatMapper statMapper;
+
+    public LearningStatServiceImpl(ProgressFeignClient progressFeignClient, LearningStatMapper statMapper) {
+        this.progressFeignClient = progressFeignClient;
+        this.statMapper = statMapper;
+    }
 
     @Override
     public void aggregate(Long videoId) {

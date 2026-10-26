@@ -1,12 +1,10 @@
 package com.zixue.common.exception;
 
 import com.zixue.common.enums.ErrorCode;
-import lombok.Getter;
 
 /**
  * 业务异常。
  */
-@Getter
 public class BizException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
@@ -21,5 +19,9 @@ public class BizException extends RuntimeException {
     public BizException(int code, String message) {
         super(message);
         this.code = code;
+    }
+
+    public int getCode() {
+        return code;
     }
 }

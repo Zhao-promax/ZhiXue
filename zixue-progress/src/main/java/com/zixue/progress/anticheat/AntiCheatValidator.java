@@ -30,31 +30,22 @@ public class AntiCheatValidator {
     public static final double MAX_SPEED = 2.0;
 
     /**
-     * @param report           本次上报
-     * @param previous         上次进度（Redis/DB 中的快照），首次上报为 null
+     * @param report            本次上报
+     * @param previous          上次进度（Redis/DB 中的快照），首次上报为 null
      * @param currentTimeMillis 服务端当前时间戳
      */
     public AntiCheatResult validate(ProgressReportDTO report, LearnProgress previous, long currentTimeMillis) {
         if (previous == null) {
             boolean speedOk = isSpeedValid(report.getSpeed());
-            return AntiCheatResult.builder()
-                    .accepted(true)
-                    .countDuration(speedOk)
-                    .intervalSeconds(0)
-                    .reason(speedOk ? AntiCheatReason.NONE : AntiCheatReason.SPEED_INVALID)
-                    .build();
+            return new AntiCheatResult(true, speedOk, 0,
+                    speedOk ? AntiCheatReason.NONE : AntiCheatReason.SPEED_INVALID);
         }
 
         long intervalSeconds = (currentTimeMillis - previous.getLastReportTime()) / 1000;
 
         // 心跳过频：直接拒绝
         if (intervalSeconds < MIN_HEARTBEAT_INTERVAL_SECONDS) {
-            return AntiCheatResult.builder()
-                    .accepted(false)
-                    .countDuration(false)
-                    .intervalSeconds(intervalSeconds)
-                    .reason(AntiCheatReason.TOO_FREQUENT)
-                    .build();
+            return new AntiCheatResult(false, false, intervalSeconds, AntiCheatReason.TOO_FREQUENT);
         }
 
         boolean countDuration = true;
@@ -73,12 +64,7 @@ public class AntiCheatValidator {
             reason = AntiCheatReason.DEVICE_SWITCH;
         }
 
-        return AntiCheatResult.builder()
-                .accepted(true)
-                .countDuration(countDuration)
-                .intervalSeconds(intervalSeconds)
-                .reason(reason)
-                .build();
+        return new AntiCheatResult(true, countDuration, intervalSeconds, reason);
     }
 
     public boolean isSpeedValid(double speed) {

@@ -1,14 +1,12 @@
 package com.zixue.common.result;
 
 import com.zixue.common.enums.ErrorCode;
-import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * 统一响应体。
  */
-@Data
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +19,9 @@ public class Result<T> implements Serializable {
 
     /** 业务数据 */
     private T data;
+
+    public Result() {
+    }
 
     public static <T> Result<T> ok() {
         return build(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMessage(), null);
@@ -44,5 +45,29 @@ public class Result<T> implements Serializable {
         result.setMessage(message);
         result.setData(data);
         return result;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

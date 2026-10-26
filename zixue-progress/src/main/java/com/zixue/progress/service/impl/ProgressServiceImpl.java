@@ -1,12 +1,12 @@
 package com.zixue.progress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zixue.common.dto.DurationSummaryVO;
 import com.zixue.common.enums.ErrorCode;
 import com.zixue.common.exception.BizException;
 import com.zixue.progress.anticheat.AntiCheatResult;
 import com.zixue.progress.anticheat.AntiCheatValidator;
 import com.zixue.progress.anticheat.DurationCalculator;
-import com.zixue.common.dto.DurationSummaryVO;
 import com.zixue.progress.dto.ProgressReportDTO;
 import com.zixue.progress.dto.ProgressVO;
 import com.zixue.progress.entity.LearnProgress;
@@ -16,19 +16,19 @@ import com.zixue.progress.mq.ProgressMessage;
 import com.zixue.progress.mq.ProgressProducer;
 import com.zixue.progress.redis.ProgressRedisService;
 import com.zixue.progress.service.ProgressService;
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 进度上报编排：防刷 → Lua 写 Redis（快路径）→ 发 MQ 异步落库（慢路径）。
  */
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class ProgressServiceImpl implements ProgressService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProgressServiceImpl.class);
 
     private final ProgressRedisService redisService;
     private final LearnProgressMapper progressMapper;
@@ -36,6 +36,20 @@ public class ProgressServiceImpl implements ProgressService {
     private final AntiCheatValidator antiCheatValidator;
     private final DurationCalculator durationCalculator;
     private final ProgressProducer producer;
+
+    public ProgressServiceImpl(ProgressRedisService redisService,
+                               LearnProgressMapper progressMapper,
+                               LearnDurationMapper durationMapper,
+                               AntiCheatValidator antiCheatValidator,
+                               DurationCalculator durationCalculator,
+                               ProgressProducer producer) {
+        this.redisService = redisService;
+        this.progressMapper = progressMapper;
+        this.durationMapper = durationMapper;
+        this.antiCheatValidator = antiCheatValidator;
+        this.durationCalculator = durationCalculator;
+        this.producer = producer;
+    }
 
     @Override
     public void report(ProgressReportDTO dto) {
@@ -68,16 +82,9 @@ public class ProgressServiceImpl implements ProgressService {
         redisService.updateProgress(dto, currentTime);
 
         // 慢路径：发 MQ，异步批量落库
-        ProgressMessage message = ProgressMessage.builder()
-                .userId(dto.getUserId())
-                .videoId(dto.getVideoId())
-                .position(dto.getPosition())
-                .duration(dto.getDuration())
-                .speed(dto.getSpeed())
-                .reportTime(currentTime)
-                .deviceId(dto.getDeviceId())
-                .validSeconds(validSeconds)
-                .build();
+        ProgressMessage message = new ProgressMessage(
+                dto.getUserId(), dto.getVideoId(), dto.getPosition(), dto.getDuration(),
+                dto.getSpeed(), currentTime, dto.getDeviceId(), validSeconds);
         producer.send(message);
     }
 

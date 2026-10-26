@@ -2,7 +2,8 @@ package com.zixue.common.exception;
 
 import com.zixue.common.enums.ErrorCode;
 import com.zixue.common.result.Result;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局异常处理：将业务异常 / 参数校验异常 / 未知异常统一转换为 {@link Result}。
  */
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BizException.class)
     public Result<Void> handleBizException(BizException e) {

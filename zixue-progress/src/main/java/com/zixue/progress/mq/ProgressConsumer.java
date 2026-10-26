@@ -5,8 +5,8 @@ import com.rabbitmq.client.Channel;
 import com.zixue.progress.entity.LearnProgress;
 import com.zixue.progress.mapper.LearnDurationMapper;
 import com.zixue.progress.mapper.LearnProgressMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -18,14 +18,22 @@ import java.util.List;
 /**
  * 进度消息消费者：批量消费 + 手动 ack，批量 upsert 落库，失败进死信队列。
  */
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class ProgressConsumer {
+
+    private static final Logger log = LoggerFactory.getLogger(ProgressConsumer.class);
 
     private final ObjectMapper objectMapper;
     private final LearnProgressMapper progressMapper;
     private final LearnDurationMapper durationMapper;
+
+    public ProgressConsumer(ObjectMapper objectMapper,
+                            LearnProgressMapper progressMapper,
+                            LearnDurationMapper durationMapper) {
+        this.objectMapper = objectMapper;
+        this.progressMapper = progressMapper;
+        this.durationMapper = durationMapper;
+    }
 
     @RabbitListener(queues = RabbitConfig.PROGRESS_QUEUE, containerFactory = "batchContainerFactory")
     public void onBatch(List<Message> messages, Channel channel) throws IOException {

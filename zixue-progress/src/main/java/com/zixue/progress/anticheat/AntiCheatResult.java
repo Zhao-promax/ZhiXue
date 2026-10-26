@@ -1,17 +1,8 @@
 package com.zixue.progress.anticheat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * 防刷校验结果。
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class AntiCheatResult {
 
     /** 是否接受本次上报（false 表示拒绝，直接丢弃） */
@@ -25,4 +16,46 @@ public class AntiCheatResult {
 
     /** 判定原因 */
     private AntiCheatReason reason;
+
+    public AntiCheatResult() {
+    }
+
+    public AntiCheatResult(boolean accepted, boolean countDuration, long intervalSeconds, AntiCheatReason reason) {
+        this.accepted = accepted;
+        this.countDuration = countDuration;
+        this.intervalSeconds = intervalSeconds;
+        this.reason = reason;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public boolean isCountDuration() {
+        return countDuration;
+    }
+
+    public void setCountDuration(boolean countDuration) {
+        this.countDuration = countDuration;
+    }
+
+    public long getIntervalSeconds() {
+        return intervalSeconds;
+    }
+
+    public void setIntervalSeconds(long intervalSeconds) {
+        this.intervalSeconds = intervalSeconds;
+    }
+
+    public AntiCheatReason getReason() {
+        return reason;
+    }
+
+    public void setReason(AntiCheatReason reason) {
+        this.reason = reason;
+    }
 }

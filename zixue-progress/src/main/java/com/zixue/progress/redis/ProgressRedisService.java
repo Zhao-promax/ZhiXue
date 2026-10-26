@@ -3,7 +3,6 @@ package com.zixue.progress.redis;
 import com.zixue.common.constant.CommonConstants;
 import com.zixue.progress.dto.ProgressReportDTO;
 import com.zixue.progress.entity.LearnProgress;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import java.util.Map;
  * 学习进度 Redis 缓存服务（Hash + Lua 原子更新）。
  */
 @Service
-@RequiredArgsConstructor
 public class ProgressRedisService {
 
     private static final String KEY_PREFIX = "learn:progress:";
@@ -26,6 +24,10 @@ public class ProgressRedisService {
 
     private final DefaultRedisScript<Long> updateScript =
             new DefaultRedisScript<>(LuaScripts.UPDATE_PROGRESS, Long.class);
+
+    public ProgressRedisService(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 读取实时进度，不存在返回 null。

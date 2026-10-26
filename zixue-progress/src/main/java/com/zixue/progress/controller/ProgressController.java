@@ -1,14 +1,11 @@
 package com.zixue.progress.controller;
 
 import com.zixue.common.constant.CommonConstants;
-import com.zixue.common.result.Result;
 import com.zixue.common.dto.DurationSummaryVO;
+import com.zixue.common.result.Result;
 import com.zixue.progress.dto.ProgressReportDTO;
 import com.zixue.progress.dto.ProgressVO;
 import com.zixue.progress.service.ProgressService;
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,15 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 进度上报接口。
  */
 @RestController
 @RequestMapping("/api/progress")
-@RequiredArgsConstructor
 public class ProgressController {
 
     private final ProgressService progressService;
+
+    public ProgressController(ProgressService progressService) {
+        this.progressService = progressService;
+    }
 
     /** 进度上报（高频心跳） */
     @PostMapping("/report")

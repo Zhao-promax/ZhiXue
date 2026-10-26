@@ -3,7 +3,6 @@ package com.zixue.learning.controller;
 import com.zixue.common.result.Result;
 import com.zixue.learning.entity.LearningStat;
 import com.zixue.learning.service.LearningStatService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/learning")
-@RequiredArgsConstructor
 public class LearningStatController {
 
     private final LearningStatService learningStatService;
+
+    public LearningStatController(LearningStatService learningStatService) {
+        this.learningStatService = learningStatService;
+    }
 
     /** 查询某视频最新学情指标 */
     @GetMapping("/stats/{videoId}")

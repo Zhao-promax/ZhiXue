@@ -20,6 +20,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+        <!-- MethodArgumentNotValidException 的父类 BindException 在 spring-context 中 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
         <!-- 日志门面 -->
         <dependency>
             <groupId>org.slf4j</groupId>

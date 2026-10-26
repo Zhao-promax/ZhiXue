@@ -1,6 +1,5 @@
 package com.zixue.learning.lock;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +9,15 @@ import java.time.Duration;
  * 基于 Redis 的简单分布式锁（SET NX EX），保证定时任务在多实例下单次执行。
  */
 @Component
-@RequiredArgsConstructor
 public class RedisLock {
 
     private static final String LOCK_PREFIX = "lock:";
 
     private final StringRedisTemplate redisTemplate;
+
+    public RedisLock(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 尝试加锁，返回是否获取成功。
