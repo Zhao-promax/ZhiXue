@@ -72,12 +72,15 @@ docker compose up -d
 
 ### 2. 启动服务
 
-在 IDEA 中分别运行三个启动类，或使用 Maven：
+**推荐用 IntelliJ IDEA**：打开项目后分别运行 `GatewayApplication`、`ProgressApplication`、`LearningApplication` 三个启动类（IDEA 会自动处理多模块依赖）。
+
+命令行方式（先安装公共模块，再启动各服务）：
 
 ```bash
-./mvnw -pl zixue-progress -am spring-boot:run
-./mvnw -pl zixue-learning  -am spring-boot:run
-./mvnw -pl zixue-gateway   -am spring-boot:run
+./mvnw -DskipTests install
+./mvnw -pl zixue-progress spring-boot:run
+./mvnw -pl zixue-learning  spring-boot:run
+./mvnw -pl zixue-gateway   spring-boot:run
 ```
 
 启动顺序建议：progress → learning → gateway。启动后各服务注册到 Nacos。
